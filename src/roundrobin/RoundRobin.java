@@ -32,10 +32,7 @@ public class RoundRobin {
     static double avgTurnaroundTime, avgWaitingTime;
     
     //Current Process Executing, Start and End Time
-    static int currentProcess, startTime, endTime;
-    
-    //isIdle
-    static boolean isIdle;
+    static int currentProcess, startTime, endTime;           
     
     //Total Burst Time
     static double totalBurstTime;
@@ -119,27 +116,20 @@ public class RoundRobin {
         processesExecuted = 0;                
 
         //Sets Current Process to Null or Empty     
-        currentProcess = -1;
-        
-        //Sets isIdle to False
-        isIdle = false;
+        currentProcess = -1;                
         
         //Initializes Start Time, and End Time
         startTime = 0;
-        endTime = 0;  
-                
-        
+        endTime = 0;                 
+                        
         if(currentTime != processes.get(0).getArrivalTime()){
-            //Lines
-            topLine.append("---------");
+            //Gantt Chart             
+            topLine.append("---------");                                                           
+            
+            ganttChart.append(" |  ").append("--").append("  |");
+            ganttChart2.append("    ").append(currentTime).append("    ");            
+            
             bottomLine.append("---------");
-            
-            //Gantt Chart            
-            ganttChart.append(" ");
-            ganttChart2.append("  "); 
-            
-            ganttChart.append("|  ").append("-").append("  |");
-            ganttChart2.append("  ").append(currentTime).append("    ");            
         }
         
         //Increments Current Time until the First Process Arives
@@ -150,7 +140,7 @@ public class RoundRobin {
         // Update Ready Queue until it is Empty
         while (!queue.isEmpty()) {            
             int i = queue.remove();                
-
+            
             //Tests if the Process's Remaining Time is less than or equal than the Time Quantum
             
             //If True
@@ -207,21 +197,18 @@ public class RoundRobin {
                 queue.add(i);
            }                                                                                               
             
-            //Lines
-            topLine.append("---------");
-            bottomLine.append("---------");
+            //Gantt Chart    
+            topLine.append("---------");                                                        
             
-            //Gantt Chart            
-            ganttChart.append(" ");
-            ganttChart2.append("  "); 
-            
-            ganttChart.append("|  ").append("P").append(currentProcess + 1).append("  |");
-            ganttChart2.append("  ").append(startTime);
-            if(startTime > 10){
+            ganttChart.append(" |  ").append("P").append(processes.get(currentProcess).getPid()).append("  |");
+            ganttChart2.append("    ").append(startTime);
+            if(startTime >= 10){
                 ganttChart2.append("   ");
             }else {
                 ganttChart2.append("    ");
             }
+            
+            bottomLine.append("---------");                       
         }
         
         //Lines and End Time
