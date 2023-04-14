@@ -32,7 +32,10 @@ public class RoundRobin {
     static double avgTurnaroundTime, avgWaitingTime;
     
     //Current Process Executing, Start and End Time
-    static int currentProcess, startTime, endTime;       
+    static int currentProcess, startTime, endTime;
+    
+    //isIdle
+    static boolean isIdle;
     
     //Total Burst Time
     static double totalBurstTime;
@@ -116,12 +119,33 @@ public class RoundRobin {
         processesExecuted = 0;                
 
         //Sets Current Process to Null or Empty     
-        currentProcess = -1;                
+        currentProcess = -1;
+        
+        //Sets isIdle to False
+        isIdle = false;
         
         //Initializes Start Time, and End Time
         startTime = 0;
         endTime = 0;  
-                                
+                
+        
+        if(currentTime != processes.get(0).getArrivalTime()){
+            //Lines
+            topLine.append("---------");
+            bottomLine.append("---------");
+            
+            //Gantt Chart            
+            ganttChart.append(" ");
+            ganttChart2.append("  "); 
+            
+            ganttChart.append("|  ").append("-").append("  |");
+            ganttChart2.append("  ").append(currentTime).append("    ");            
+        }
+        
+        //Increments Current Time until the First Process Arives
+        while(currentTime != processes.get(0).getArrivalTime()){
+            currentTime++;
+        }
 
         // Update Ready Queue until it is Empty
         while (!queue.isEmpty()) {            
