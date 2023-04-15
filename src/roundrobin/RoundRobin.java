@@ -104,43 +104,41 @@ public class RoundRobin {
         Collections.sort(processes, arrivalTimeComparator);
     }
          
-    public static void roundRobin(){
+    public static void roundRobin(){                
+        //Initalizes Current Time and the Number of Procceses Executed
+        currentTime = 0;                
+        processesExecuted = 0;   
+        
+        //Initializes Start Time, and End Time
+        startTime = 0;
+        endTime = 0;  
+
+        //Sets Current Process to Null or Empty     
+        currentProcess = -1;                                                                               
+
+        if(processes.get(0).getArrivalTime() != 0){           
+            //Gantt Chart             
+            topLine.append("---------");
+
+            ganttChart.append(" |  ").append("--").append("  |");
+            ganttChart2.append("    ").append(currentTime).append("    ");
+
+            bottomLine.append("---------");
+            
+            currentTime = processes.get(0).getArrivalTime();
+        }
+        
         //Initialize Queue 
         readyQueue.add(0);        
         
         //Sets the 1st Processes InQueue to True
         processes.get(0).setInQueue(true);
         
-        //Initalizes Current Time and the Number of Procceses Executed
-        currentTime = 0;                
-        processesExecuted = 0;                
-
-        //Sets Current Process to Null or Empty     
-        currentProcess = -1;                
-        
-        //Initializes Start Time, and End Time
-        startTime = 0;
-        endTime = 0;                                                 
-
         // Update Ready Queue until it is Empty
-        while (!readyQueue.isEmpty() || processesExecuted != n) {
-            int i = readyQueue.remove();
-
-            if (currentTime < processes.get(i).getArrivalTime()) {
-                processes.get(0).setInQueue(false);
-                
-                //Gantt Chart             
-                topLine.append("---------");
-
-                ganttChart.append(" |  ").append("--").append("  |");
-                ganttChart2.append("    ").append(currentTime).append("    ");
-
-                bottomLine.append("---------");
-
-                currentTime = processes.get(i).getArrivalTime();
-                                               
-                checkForNewProcesses();
-            } else {
+        while (processesExecuted != n) {
+            if(!readyQueue.isEmpty()){
+                int i = readyQueue.remove();
+            
                 //Tests if the Process's Remaining Time is less than or equal than the Time Quantum
 
                 //If True
@@ -214,8 +212,28 @@ public class RoundRobin {
                 }
 
                 bottomLine.append("---------");
-            }
+            }else{
+                //Gantt Chart             
+                topLine.append("---------");
 
+                ganttChart.append(" |  ").append("--").append("  |");
+                ganttChart2.append("    ").append(currentTime);
+                
+                if (currentTime >= 10) {
+                    ganttChart2.append("   ");
+                } else {
+                    ganttChart2.append("    ");
+                }
+                
+                bottomLine.append("---------");
+                
+                for (Process p : processes) {
+                    if(p.getArrivalTime() > currentTime){
+                        currentTime = p.getArrivalTime();
+                    }
+                }
+                checkForNewProcesses();
+            }                       
         }              
         
         avgTurnaroundTime = 0;
