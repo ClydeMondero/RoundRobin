@@ -20,7 +20,7 @@ public class RoundRobin {
     static int currentTime, processesExecuted;
     
     //Ready Queue
-    static Queue<Integer> queue = new LinkedList<>();
+    static Queue<Integer> readyQueue = new LinkedList<>();
     
     //String Builders for the Gantt Chart
     static StringBuilder topLine = new StringBuilder(); 
@@ -44,7 +44,7 @@ public class RoundRobin {
         //Clear
         if(!processes.isEmpty()){
             processes.clear();
-            queue.clear();
+            readyQueue.clear();
             topLine.setLength(0);
             ganttChart.setLength(0);
             bottomLine.setLength(0);
@@ -106,7 +106,7 @@ public class RoundRobin {
          
     public static void roundRobin(){
         //Initialize Queue 
-        queue.add(0);        
+        readyQueue.add(0);        
         
         //Sets the 1st Processes InQueue to True
         processes.get(0).setInQueue(true);
@@ -120,101 +120,103 @@ public class RoundRobin {
         
         //Initializes Start Time, and End Time
         startTime = 0;
-        endTime = 0;                 
-                        
-        if(currentTime != processes.get(0).getArrivalTime()){
-            //Gantt Chart             
-            topLine.append("---------");                                                           
-            
-            ganttChart.append(" |  ").append("--").append("  |");
-            ganttChart2.append("    ").append(currentTime).append("    ");            
-            
-            bottomLine.append("---------");
-        }
-        
-        //Increments Current Time until the First Process Arives
-        while(currentTime != processes.get(0).getArrivalTime()){
-            currentTime++;
-        }
+        endTime = 0;                                                 
 
         // Update Ready Queue until it is Empty
-        while (!queue.isEmpty()) {            
-            int i = queue.remove();                
-            
-            //Tests if the Process's Remaining Time is less than or equal than the Time Quantum
-            
-            //If True
-            if (processes.get(i).getRemainingTime() <= timeQuantum) {
-                //Saves Current Process
-                currentProcess = i;
-                
-                //Updates Process's Start Time
-                startTime = currentTime;
-                
-                //Update Process's End Time
-                endTime = currentTime + processes.get(i).getRemainingTime();
+        while (!readyQueue.isEmpty() || processesExecuted != n) {
+            int i = readyQueue.remove();
 
-                //Sets Process's isComplete to True
-                processes.get(i).setIsComplete(true);
+            if (currentTime < processes.get(i).getArrivalTime()) {
+                processes.get(0).setInQueue(false);
                 
-                //Updates Process's Current Time
-                currentTime = endTime;
-                
-                //Updates  Process's Remaining Time to 0
-                 processes.get(i).setRemainingTime(0);
-                
-                //Saves Process's Completion Time, Turnaround Time, and Waiting Time
-                processes.get(i).setCompletionTime(currentTime);                                
-                processes.get(i).setTurnaroundTime(processes.get(i).getCompletionTime() - processes.get(i).getArrivalTime());
-                processes.get(i).setWaitingTime(processes.get(i).getTurnaroundTime() - processes.get(i).getBurstTime());      
-                
-                //Checks for New Processes
+                //Gantt Chart             
+                topLine.append("---------");
+
+                ganttChart.append(" |  ").append("--").append("  |");
+                ganttChart2.append("    ").append(currentTime).append("    ");
+
+                bottomLine.append("---------");
+
+                currentTime = processes.get(i).getArrivalTime();
+                                               
                 checkForNewProcesses();
-
-                //Increments the Numbers of Processes that Executed
-                processesExecuted++;                
-                
-            //If False
             } else {
-                //Saves Current Process
-                currentProcess = i;
-                
-                //Updates Process's Start Time
-                startTime = currentTime;
-                
-                //Updates Process's End Time
-                endTime = currentTime + timeQuantum;
+                //Tests if the Process's Remaining Time is less than or equal than the Time Quantum
 
-                //Updates Process's Remaining Time                
-                processes.get(i).setRemainingTime(processes.get(i).getRemainingTime() - timeQuantum);
-                
-                //Updates Process's Current Time
-                currentTime = endTime;                              
-                
-                //Checks for New Processes
-                checkForNewProcesses();
+                //If True
+                if (processes.get(i).getRemainingTime() <= timeQuantum) {
+                    //Saves Current Process
+                    currentProcess = i;
 
-                queue.add(i);
-           }                                                                                               
-            
-            //Gantt Chart    
-            topLine.append("---------");                                                        
-            
-            ganttChart.append(" |  ").append("P").append(processes.get(currentProcess).getPid()).append("  |");
-            ganttChart2.append("    ").append(startTime);
-            if(startTime >= 10){
-                ganttChart2.append("   ");
-            }else {
-                ganttChart2.append("    ");
+                    //Updates Process's Start Time
+                    startTime = currentTime;
+
+                    //Update Process's End Time
+                    endTime = currentTime + processes.get(i).getRemainingTime();
+
+                    //Sets Process's isComplete to True
+                    processes.get(i).setIsComplete(true);
+
+                    //Updates Process's Current Time
+                    currentTime = endTime;
+
+                    //Updates  Process's Remaining Time to 0
+                    processes.get(i).setRemainingTime(0);
+
+                    //Saves Process's Completion Time, Turnaround Time, and Waiting Time
+                    processes.get(i).setCompletionTime(currentTime);
+                    processes.get(i).setTurnaroundTime(processes.get(i).getCompletionTime() - processes.get(i).getArrivalTime());
+                    processes.get(i).setWaitingTime(processes.get(i).getTurnaroundTime() - processes.get(i).getBurstTime());
+
+                    //Checks for New Processes
+                    checkForNewProcesses();
+
+                    //Increments the Numbers of Processes that Executed
+                    processesExecuted++;
+
+                    //If False
+                } else {
+                    //Saves Current Process
+                    currentProcess = i;
+
+                    //Updates Process's Start Time
+                    startTime = currentTime;
+
+                    //Updates Process's End Time
+                    endTime = currentTime + timeQuantum;
+
+                    //Updates Process's Remaining Time                
+                    processes.get(i).setRemainingTime(processes.get(i).getRemainingTime() - timeQuantum);
+
+                    //Updates Process's Current Time
+                    currentTime = endTime;
+
+                    //Checks for New Processes
+                    checkForNewProcesses();
+
+                    readyQueue.add(i);
+                }
+
+                //Gantt Chart    
+                topLine.append("---------");
+
+                ganttChart.append(" |  ").append("P").append(processes.get(currentProcess).getPid()).append("  |");
+                if (processesExecuted != n) {
+                    ganttChart2.append("    ").append(startTime);
+                } else {
+                    ganttChart2.append("    ").append(startTime).append("       ").append(endTime);
+                }
+
+                if (startTime >= 10) {
+                    ganttChart2.append("   ");
+                } else {
+                    ganttChart2.append("    ");
+                }
+
+                bottomLine.append("---------");
             }
-            
-            bottomLine.append("---------");                       
-        }
-        
-        //Lines and End Time
-        topLine.append("------");
-        bottomLine.append("------");
-        ganttChart2.append("    ").append(endTime);
+
+        }              
         
         avgTurnaroundTime = 0;
         avgWaitingTime = 0;
@@ -246,8 +248,7 @@ public class RoundRobin {
                     processes.get(j).setInQueue(true);
 
                     //Adds the Process to the Queue
-                    queue.add(j);
-
+                    readyQueue.add(j);
                 }
             }
         }
