@@ -103,9 +103,9 @@ public class RoundRobin {
     
     //String Builders for the Gantt Chart
     static StringBuilder topLine = new StringBuilder(); 
-    static StringBuilder ganttChart = new StringBuilder(); 
+    static StringBuilder processIdGanttChart = new StringBuilder(); 
     static StringBuilder bottomLine = new StringBuilder(); 
-    static StringBuilder ganttChart2 = new StringBuilder();
+    static StringBuilder timeGanttChart = new StringBuilder();
     
     //Average Turnaround Time and Average Waiting Time
     static double avgTurnaroundTime, avgWaitingTime;
@@ -114,7 +114,7 @@ public class RoundRobin {
     static int currentProcess, startTime, endTime;           
     
     //Total Burst Time
-    static double totalBurstTime;
+    static double totalBurstTime, totalTurnaroundTime, totalWaitingTime;
     
     //CPU Utilization
     static double cpuUtilization;        
@@ -125,10 +125,9 @@ public class RoundRobin {
             processes.clear();
             readyQueue.clear();
             topLine.setLength(0);
-            ganttChart.setLength(0);
+            processIdGanttChart.setLength(0);
             bottomLine.setLength(0);
-            ganttChart2.setLength(0);
-            
+            timeGanttChart.setLength(0);            
         }
         
         //Title
@@ -199,8 +198,8 @@ public class RoundRobin {
             //Gantt Chart             
             topLine.append("---------");
 
-            ganttChart.append(" |  ").append("--").append("  |");
-            ganttChart2.append("    ").append(currentTime).append("    ");
+            processIdGanttChart.append(" |  ").append("--").append("   ");
+            timeGanttChart.append("    ").append(currentTime).append("    ");
 
             bottomLine.append("---------");
             
@@ -277,17 +276,18 @@ public class RoundRobin {
                 //Gantt Chart    
                 topLine.append("---------");
 
-                ganttChart.append(" |  ").append("P").append(processes.get(currentProcess).getPid()).append("  |");
+                processIdGanttChart.append(" |  ").append("P").append(processes.get(currentProcess).getPid()).append("   ");
                 if (processesExecuted != n) {
-                    ganttChart2.append("    ").append(startTime);
+                    timeGanttChart.append("    ").append(startTime);
                 } else {
-                    ganttChart2.append("    ").append(startTime).append("       ").append(endTime);
+                    processIdGanttChart.append("|");
+                    timeGanttChart.append("    ").append(startTime).append("       ").append(endTime);
                 }
 
                 if (startTime >= 10) {
-                    ganttChart2.append("   ");
+                    timeGanttChart.append("   ");
                 } else {
-                    ganttChart2.append("    ");
+                    timeGanttChart.append("    ");
                 }
 
                 bottomLine.append("---------");
@@ -295,13 +295,13 @@ public class RoundRobin {
                 //Gantt Chart             
                 topLine.append("---------");
 
-                ganttChart.append(" |  ").append("--").append("  |");
-                ganttChart2.append("    ").append(currentTime);
+                processIdGanttChart.append(" |  ").append("--").append("   ");
+                timeGanttChart.append("    ").append(currentTime);
                 
                 if (currentTime >= 10) {
-                    ganttChart2.append("   ");
+                    timeGanttChart.append("   ");
                 } else {
-                    ganttChart2.append("    ");
+                    timeGanttChart.append("    ");
                 }
                 
                 bottomLine.append("---------");
@@ -314,21 +314,24 @@ public class RoundRobin {
                 updateReadyQueue();
             }                       
         }              
+                
+        totalBurstTime = 0;
+        totalTurnaroundTime = 0;
+        totalWaitingTime = 0;
         
         avgTurnaroundTime = 0;
         avgWaitingTime = 0;
-        totalBurstTime = 0;
         
         //Sums Every Process's Turnaround Time, Waiting Time, and Burst Time
         for (Process p : processes) {
-            avgTurnaroundTime += p.getTurnaroundTime();
-            avgWaitingTime += p.getWaitingTime();
+            totalTurnaroundTime += p.getTurnaroundTime();
+            totalWaitingTime += p.getWaitingTime();
             totalBurstTime += p.getBurstTime();
         }
 
         //Saves the Average Turnaround Time and Average Waiting Time
-        avgTurnaroundTime /= n;
-        avgWaitingTime /= n;
+        avgTurnaroundTime = totalTurnaroundTime / n;
+        avgWaitingTime = totalWaitingTime / n;
                 
         //Saves the CPU Utilization
         cpuUtilization = (totalBurstTime/(double)endTime) * 100 ;
@@ -375,9 +378,9 @@ public class RoundRobin {
         //Prints Gantt Chart        
         System.out.println("\nGantt Chart:");
         System.out.println(" " + topLine.toString());
-        System.out.println(ganttChart.toString());
+        System.out.println(processIdGanttChart.toString());
         System.out.println(" " + bottomLine.toString());
-        System.out.println(ganttChart2.toString());
+        System.out.println(timeGanttChart.toString());
         
         System.out.print("\n--------------------------------------------------------------------------------------------");
 
@@ -390,13 +393,23 @@ public class RoundRobin {
 
         System.out.println("--------------------------------------------------------------------------------------------");
         
+        System.out.println("\nNumber of Processes: " + n);
+        
+        System.out.println("\nLast Completion Time: " + endTime);
+        
+        System.out.println("\nTotal Burst Time: " + (int) totalBurstTime);
+        
+        System.out.println("\nTotal Turnaround Time: " + (int) totalTurnaroundTime);
+        
+        System.out.println("\nTotal Waiting Time: " + (int) totalWaitingTime);
+        
         //Prints Average Turnaround Time and Waiting Time into 2 Decimal Places
         DecimalFormat df = new DecimalFormat("#.##");        
-        System.out.println("\nAverage Turnaround Time: " + df.format(avgTurnaroundTime));
-        System.out.println("\nAverage Waiting Time: " + df.format(avgWaitingTime));
+        System.out.println("\nAverage Turnaround Time: " + (int) totalTurnaroundTime + " / " + n + " = " + df.format(avgTurnaroundTime));
+        System.out.println("\nAverage Waiting Time: " + (int) totalWaitingTime + " / " + n + " = " + df.format(avgWaitingTime));
         
         //Prints CPU Utilization        
-        System.out.println("\nCPU Utilization: " +  df.format(cpuUtilization) + "%");                              
+        System.out.println("\nCPU Utilization: (" + (int)totalBurstTime + " / " + endTime + ") * 100 = " +  df.format(cpuUtilization) + "%");                              
     }
 
     public static void main(String[] args) {
