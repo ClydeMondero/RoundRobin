@@ -173,13 +173,12 @@ public class RoundRobin {
         }
         
         //Sorts Processes by its Arrival Time
-        Comparator<Process> arrivalTimeComparator = new Comparator<Process>() {
+        Collections.sort(processes, new Comparator<Process>() {
+            @Override
             public int compare(Process p1, Process p2) {
-                return Double.compare(p1.getArrivalTime(), p2.getArrivalTime());
+                return Integer.compare(p1.getArrivalTime(), p2.getArrivalTime());
             }
-        };
-                
-        Collections.sort(processes, arrivalTimeComparator);
+        });        
     }
          
     public static void roundRobin(){                
@@ -356,13 +355,12 @@ public class RoundRobin {
          
     public static void output(){
         //Sorts Processes by its Arrival Time
-        Comparator<Process> processIdComparator = new Comparator<Process>() {
+       Collections.sort(processes, new Comparator<Process>() {
+            @Override
             public int compare(Process p1, Process p2) {
-                return Double.compare(p1.getPid(), p2.getPid());
+                return Integer.compare(p1.getPid(), p2.getPid());
             }
-        };
-                
-        Collections.sort(processes, processIdComparator);
+        });                         
         
         System.out.print("\n------------------------------------------");
 
