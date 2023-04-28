@@ -275,12 +275,12 @@ public class RoundRobin {
                 //Gantt Chart    
                 topLine.append("---------");
 
-                processIdGanttChart.append(" |   ").append("P").append(processes.get(currentProcess).getPid()).append("   ");
+                processIdGanttChart.append("|   ").append("P").append(processes.get(currentProcess).getPid()).append("   ");
                 if (processesExecuted != n) {
-                    timeGanttChart.append("     ").append(startTime);
-                } else {
+                    timeGanttChart.append("    ").append(startTime);
+                } else {                    
                     processIdGanttChart.append("|");
-                    timeGanttChart.append("     ").append(startTime).append("       ").append(endTime);
+                    timeGanttChart.append("     ").append(startTime).append("       ").append(endTime);                    
                 }
 
                 if (startTime >= 10) {
@@ -294,11 +294,11 @@ public class RoundRobin {
                 //Gantt Chart             
                 topLine.append("---------");
 
-                processIdGanttChart.append(" |   ").append("--").append("   ");
-                timeGanttChart.append("     ").append(currentTime);
+                processIdGanttChart.append("|   ").append("--").append("   ");
+                timeGanttChart.append("    ").append(currentTime);
                 
                 if (currentTime >= 10) {
-                    timeGanttChart.append("   ");
+                    timeGanttChart.append("  ");
                 } else {
                     timeGanttChart.append("    ");
                 }
@@ -362,7 +362,8 @@ public class RoundRobin {
             }
         });                         
         
-        System.out.print("\n------------------------------------------");
+        System.out.println("\nInput:");
+        System.out.print("------------------------------------------");
 
         //Prints Process's ID, Arrival Time, Burst Time, Time Quantum
         System.out.println("\nProcess \tArrival Time\tBurst Time");
@@ -380,7 +381,8 @@ public class RoundRobin {
         System.out.println(" " + bottomLine.toString());
         System.out.println(timeGanttChart.toString());
         
-        System.out.print("\n--------------------------------------------------------------------------------------------");
+        System.out.println("\nOutput:");
+        System.out.print("--------------------------------------------------------------------------------------------");
 
         //Prints Process's ID, Arrival Time, Burst Time, Completion Time, Turnaround Time, and Waiting Time
         System.out.println("\nProcess \tArrival Time\tBurst Time\tCompletion Time\tTurnaround Time\tWaiting Time");
@@ -389,22 +391,22 @@ public class RoundRobin {
                     + p.getCompletionTime() + "\t\t" + p.getTurnaroundTime() + "\t\t" + p.getWaitingTime());
         }
 
-        System.out.println("--------------------------------------------------------------------------------------------");
-        
-        System.out.println("\nNumber of Processes: " + n);
-        
-        System.out.println("\nLast Completion Time: " + endTime);
-        
-        System.out.println("\nTotal Burst Time: " + (int) totalBurstTime);
+        System.out.println("--------------------------------------------------------------------------------------------");                                          
         
         System.out.println("\nTotal Turnaround Time: " + (int) totalTurnaroundTime);
         
         System.out.println("\nTotal Waiting Time: " + (int) totalWaitingTime);
         
+        System.out.println("\nNumber of Processes: " + n);  
+        
         //Prints Average Turnaround Time and Waiting Time into 2 Decimal Places
         DecimalFormat df = new DecimalFormat("#.##");        
         System.out.println("\nAverage Turnaround Time: " + (int) totalTurnaroundTime + " / " + n + " = " + df.format(avgTurnaroundTime));
         System.out.println("\nAverage Waiting Time: " + (int) totalWaitingTime + " / " + n + " = " + df.format(avgWaitingTime));
+        
+        System.out.println("\nTotal Burst Time: " + (int) totalBurstTime);
+        
+        System.out.println("\nLast Completion Time: " + endTime);   
         
         //Prints CPU Utilization        
         System.out.println("\nCPU Utilization: (" + (int)totalBurstTime + " / " + endTime + ") * 100 = " +  df.format(cpuUtilization) + "%");                              
