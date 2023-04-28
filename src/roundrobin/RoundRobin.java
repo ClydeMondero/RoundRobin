@@ -4,11 +4,11 @@ import java.text.DecimalFormat;
 import java.util.*;
 
 class Process{
-    int pid, arrivalTime, burstTime, remainingTime, completionTime, turnaroundTime, waitingTime;
+    int id, arrivalTime, burstTime, remainingTime, completionTime, turnaroundTime, waitingTime;
     boolean isComplete, inQueue;
 
     public Process(int pid, int arrivalTime, int burstTime) {
-        this.pid = pid;
+        this.id = pid;
         this.arrivalTime = arrivalTime;
         this.burstTime = burstTime;
         this.remainingTime = burstTime;
@@ -19,8 +19,8 @@ class Process{
         this.inQueue = false;
     }
 
-    public int getPid() {
-        return pid;
+    public int getId() {
+        return id;
     }
 
     public int getArrivalTime() {
@@ -275,7 +275,7 @@ public class RoundRobin {
                 //Gantt Chart    
                 topLine.append("---------");
 
-                processIdGanttChart.append("|   ").append("P").append(processes.get(currentProcess).getPid()).append("   ");
+                processIdGanttChart.append("|   ").append("P").append(processes.get(currentProcess).getId()).append("   ");
                 if (processesExecuted != n) {
                     timeGanttChart.append("    ").append(startTime);
                 } else {                    
@@ -353,28 +353,20 @@ public class RoundRobin {
         }
     }
          
-    public static void output(){
-        //Sorts Processes by its Arrival Time
-       Collections.sort(processes, new Comparator<Process>() {
-            @Override
-            public int compare(Process p1, Process p2) {
-                return Integer.compare(p1.getPid(), p2.getPid());
-            }
-        });                         
+    public static void output(){        
+       processes.sort(Comparator.comparing(Process::getId));                        
         
         System.out.println("\nInput:");
         System.out.print("------------------------------------------");
-
-        //Prints Process's ID, Arrival Time, Burst Time, Time Quantum
+        
         System.out.println("\nProcess \tArrival Time\tBurst Time");
         for (Process p : processes) {
-            System.out.println(p.getPid() + "\t\t" + p.getArrivalTime() + "\t\t" + p.getBurstTime());
+            System.out.println(p.getId() + "\t\t" + p.getArrivalTime() + "\t\t" + p.getBurstTime());
         }
         System.out.print("Time Quantum: " + timeQuantum);
 
         System.out.print("\n------------------------------------------\n");
-        
-        //Prints Gantt Chart        
+                      
         System.out.println("\nGantt Chart:");
         System.out.println(" " + topLine.toString());
         System.out.println(processIdGanttChart.toString());
@@ -387,7 +379,7 @@ public class RoundRobin {
         //Prints Process's ID, Arrival Time, Burst Time, Completion Time, Turnaround Time, and Waiting Time
         System.out.println("\nProcess \tArrival Time\tBurst Time\tCompletion Time\tTurnaround Time\tWaiting Time");
         for (Process p : processes) {
-            System.out.println(p.getPid() + "\t\t" + p.getArrivalTime() + "\t\t" + p.getBurstTime() + "\t\t"
+            System.out.println(p.getId() + "\t\t" + p.getArrivalTime() + "\t\t" + p.getBurstTime() + "\t\t"
                     + p.getCompletionTime() + "\t\t" + p.getTurnaroundTime() + "\t\t" + p.getWaitingTime());
         }
 
@@ -398,8 +390,7 @@ public class RoundRobin {
         System.out.println("\nTotal Waiting Time: " + (int) totalWaitingTime);
         
         System.out.println("\nNumber of Processes: " + n);  
-        
-        //Prints Average Turnaround Time and Waiting Time into 2 Decimal Places
+               
         DecimalFormat df = new DecimalFormat("#.##");        
         System.out.println("\nAverage Turnaround Time: " + (int) totalTurnaroundTime + " / " + n + " = " + df.format(avgTurnaroundTime));
         System.out.println("\nAverage Waiting Time: " + (int) totalWaitingTime + " / " + n + " = " + df.format(avgWaitingTime));
@@ -407,13 +398,11 @@ public class RoundRobin {
         System.out.println("\nTotal Burst Time: " + (int) totalBurstTime);
         
         System.out.println("\nLast Completion Time: " + endTime);   
-        
-        //Prints CPU Utilization        
+                        
         System.out.println("\nCPU Utilization: (" + (int)totalBurstTime + " / " + endTime + ") * 100 = " +  df.format(cpuUtilization) + "%");                              
     }
 
-    public static void main(String[] args) {
-        //Loops until User chooses to stop
+    public static void main(String[] args) {        
         int choice = 1;
         while (choice == 1) {            
             input();
