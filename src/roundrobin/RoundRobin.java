@@ -275,12 +275,12 @@ public class RoundRobin {
                 //Gantt Chart    
                 topLine.append("---------");
 
-                processIdGanttChart.append(" |  ").append("P").append(processes.get(currentProcess).getPid()).append("   ");
+                processIdGanttChart.append(" |   ").append("P").append(processes.get(currentProcess).getPid()).append("   ");
                 if (processesExecuted != n) {
-                    timeGanttChart.append("    ").append(startTime);
+                    timeGanttChart.append("     ").append(startTime);
                 } else {
                     processIdGanttChart.append("|");
-                    timeGanttChart.append("    ").append(startTime).append("       ").append(endTime);
+                    timeGanttChart.append("     ").append(startTime).append("       ").append(endTime);
                 }
 
                 if (startTime >= 10) {
@@ -294,8 +294,8 @@ public class RoundRobin {
                 //Gantt Chart             
                 topLine.append("---------");
 
-                processIdGanttChart.append(" |  ").append("--").append("   ");
-                timeGanttChart.append("    ").append(currentTime);
+                processIdGanttChart.append(" |   ").append("--").append("   ");
+                timeGanttChart.append("     ").append(currentTime);
                 
                 if (currentTime >= 10) {
                     timeGanttChart.append("   ");
