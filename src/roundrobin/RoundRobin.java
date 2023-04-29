@@ -5,7 +5,7 @@ import java.util.*;
 
 class Process {
 
-    private int id, arrivalTime, burstTime, remainingTime, completionTime, turnaroundTime, waitingTime; 
+    private int id, arrivalTime, burstTime, remainingTime, completionTime, turnaroundTime, waitingTime;
     boolean inQueue, isComplete;
 
     public Process(int pid, int arrivalTime, int burstTime) {
@@ -15,7 +15,7 @@ class Process {
         this.remainingTime = burstTime;
         this.completionTime = 0;
         this.turnaroundTime = 0;
-        this.waitingTime = 0;      
+        this.waitingTime = 0;
         this.inQueue = false;
         this.isComplete = false;
     }
@@ -47,7 +47,7 @@ class Process {
     public int getWaitingTime() {
         return waitingTime;
     }
-   
+
     public void setRemainingTime(int remainingTime) {
         this.remainingTime = remainingTime;
     }
@@ -62,7 +62,7 @@ class Process {
 
     public void setWaitingTime(int turnaroundTime, int burstTime) {
         this.waitingTime = turnaroundTime - burstTime;
-    } 
+    }
 
     public boolean inQueue() {
         return inQueue;
@@ -79,88 +79,88 @@ class Process {
     public void setIsComplete(boolean isComplete) {
         this.isComplete = isComplete;
     }
-    
-    
+
 }
 
 public class RoundRobin {
-    
+
     static int n, timeQuantum, arrivalTime, burstTime;
-   
+
     static Scanner sc = new Scanner(System.in);
-    
-    static ArrayList<Process> processes = new ArrayList<>();                 
+
+    static ArrayList<Process> processes = new ArrayList<>();
 
     public static void input() {
         if (!processes.isEmpty()) {
             processes.clear();
             readyQueue.clear();
             topLine.setLength(0);
-            processIdGanttChart.setLength(0);
+            processId.setLength(0);
             bottomLine.setLength(0);
-            timeGanttChart.setLength(0);
+            time.setLength(0);
         }
 
         System.out.println("----------------------------Round Robin CPU Scheduling Algorithm----------------------------");
 
-        System.out.print("\nEnter the number of processes: ");
+        System.out.println("\n- - - - - - - - - - - - - - - - - - - - - I N P U T - - - - - - - - - - - - - - - - - - - - ");
+
+        System.out.print("\nNumber of Processes: ");
         n = sc.nextInt();
 
         while (n <= 0 || n < 3 || n > 6) {
-            System.out.println("\nInvalid number of processes!");
+            System.out.println("\nInvalid Number of Processes!");
             if (n <= 0) {
-                System.out.println("\nNumber of processes cannot be less than or equal to 0!");
+                System.out.println("\nNumber of Processes cannot be less than or equal to 0!");
             } else if (n < 3) {
-                System.out.println("\nMinimun number of processes is 3!");
+                System.out.println("\nMinimun Number of Processes is 3!");
             } else if (n > 6) {
-                System.out.println("\nMaximum number of processes is 6!");
+                System.out.println("\nMaximum Number of Processes is 6!");
             }
-            System.out.print("\nEnter the number of processes: ");
+            System.out.print("\nNumber of Processes: ");
             n = sc.nextInt();
         }
 
-        
         for (int i = 0; i < n; i++) {
-            System.out.print("\nEnter Arrival Time and Burst Time for Process #" + (i + 1) + ": ");
+            System.out.println("\nProcess " + (i + 1));
+            System.out.print("\tArrival Time: ");
             arrivalTime = sc.nextInt();
+            System.out.print("\tBurst Time: ");
             burstTime = sc.nextInt();
             processes.add(new Process((i + 1), arrivalTime, burstTime));
         }
 
-        
-        System.out.print("\nEnter Time Quantum: ");
+        System.out.print("\nTime Quantum: ");
         timeQuantum = sc.nextInt();
 
-       
         while (timeQuantum <= 0) {
             System.out.println("\nInvalid Time Quantum!");
             System.out.println("\nTime Quantum cannot be less than or equal 0!");
-            System.out.print("\nEnter Time Quantum: ");
+            System.out.print("\nTime Quantum: ");
             timeQuantum = sc.nextInt();
         }
 
         processes.sort(Comparator.comparing(Process::getArrivalTime));
     }
-    
+
     static ArrayList<Process> readyQueue = new ArrayList<>();
 
     static int currentTime, completedProcess;
     static int startTime, endTime;
-    
+
     static Process currentProcess;
-    
-    static int i;     
-    
-    static double avgTurnaroundTime, avgWaitingTime;   
+
+    static int i;
+
+    static double avgTurnaroundTime, avgWaitingTime;
 
     static double totalBurstTime, totalTurnaroundTime, totalWaitingTime;
 
     static double cpuUtilization;
-    
+
     static StringBuilder topLine = new StringBuilder();
-    static StringBuilder processIdGanttChart = new StringBuilder();
+    static StringBuilder processId = new StringBuilder();
     static StringBuilder bottomLine = new StringBuilder();
-    static StringBuilder timeGanttChart = new StringBuilder();
+    static StringBuilder time = new StringBuilder();
 
     public static void roundRobin() {
         currentTime = 0;
@@ -170,89 +170,89 @@ public class RoundRobin {
         endTime = 0;
 
         currentProcess = null;
-        
+
         i = 0;
-        
-        if (processes.get(0).getArrivalTime() != 0) {                      
+
+        if (processes.get(0).getArrivalTime() != 0) {
             topLine.append("---------");
 
-            processIdGanttChart.append(" |  ").append("--").append("   ");
-            timeGanttChart.append("    ").append(currentTime).append("    ");
+            processId.append(" |   ").append("--").append("   ");
+            time.append("     ").append(currentTime).append("    ");
 
             bottomLine.append("---------");
 
             currentTime = processes.get(0).getArrivalTime();
         }
-        
+
         readyQueue.add(processes.get(0));
-        
+
         processes.get(0).setInQueue(true);
 
-        while (completedProcess != n) {            
+        while (completedProcess != n) {
             if (!readyQueue.isEmpty()) {
                 currentProcess = readyQueue.get(0);
                 readyQueue.remove(0);
-                i = processes.indexOf(currentProcess);                
-                
-                if (currentProcess.getRemainingTime() <= timeQuantum) {                                        
+                i = processes.indexOf(currentProcess);
+
+                if (currentProcess.getRemainingTime() <= timeQuantum) {
                     startTime = currentTime;
-                    
+
                     endTime = currentTime + currentProcess.getRemainingTime();
-                                       
+
                     currentTime = endTime;
-                    
+
                     processes.get(i).setIsComplete(true);
-                    
+
                     processes.get(i).setRemainingTime(0);
-                    
+
                     processes.get(i).setCompletionTime(currentTime);
                     processes.get(i).setTurnaroundTime(processes.get(i).getCompletionTime(), processes.get(i).getArrivalTime());
-                    processes.get(i).setWaitingTime(processes.get(i).getTurnaroundTime(), processes.get(i).getBurstTime());   
-                    
+                    processes.get(i).setWaitingTime(processes.get(i).getTurnaroundTime(), processes.get(i).getBurstTime());
+
                     updateReadyQueue();
-                    
-                    completedProcess++;                 
-                } else {                                        
+
+                    completedProcess++;
+                } else {
                     startTime = currentTime;
-                    
+
                     endTime = currentTime + timeQuantum;
-                                   
+
                     processes.get(i).setRemainingTime(processes.get(i).getRemainingTime() - timeQuantum);
-                    
-                    currentTime = endTime;  
-                    
+
+                    currentTime = endTime;
+
                     updateReadyQueue();
 
                     readyQueue.add(currentProcess);
                 }
-                   
+
                 topLine.append("---------");
 
-                processIdGanttChart.append("|   ").append("P").append(currentProcess.getId()).append("   ");
+                processId.append("|   ").append("P").append(currentProcess.getId()).append("   ");
                 if (completedProcess != n) {
-                    timeGanttChart.append("    ").append(startTime);
+                    time.append("    ").append(startTime);
                 } else {
-                    processIdGanttChart.append("|");
-                    timeGanttChart.append("     ").append(startTime).append("       ").append(endTime);
+                    processId.append("|");
+                    time.append("    ").append(startTime).append("       ").append(endTime);
                 }
 
                 if (startTime >= 10) {
-                    timeGanttChart.append("   ");
+                    time.append("   ");
                 } else {
-                    timeGanttChart.append("    ");
+                    time.append("    ");
                 }
 
                 bottomLine.append("---------");
-            } else {                            
+            } else {
                 topLine.append("---------");
 
-                processIdGanttChart.append("|   ").append("--").append("   ");
-                timeGanttChart.append("    ").append(currentTime);
+                processId.append("|   ").append("--").append("   ");
+                time.append("    ").append(currentTime);
 
                 if (currentTime >= 10) {
-                    timeGanttChart.append("  ");
+                    time.append("  ");
                 } else {
-                    timeGanttChart.append("    ");
+                    time.append("    ");
                 }
 
                 bottomLine.append("---------");
@@ -272,16 +272,16 @@ public class RoundRobin {
 
         avgTurnaroundTime = 0;
         avgWaitingTime = 0;
-        
+
         for (Process p : processes) {
             totalTurnaroundTime += p.getTurnaroundTime();
             totalWaitingTime += p.getWaitingTime();
             totalBurstTime += p.getBurstTime();
         }
-       
+
         avgTurnaroundTime = totalTurnaroundTime / n;
         avgWaitingTime = totalWaitingTime / n;
-        
+
         cpuUtilization = (totalBurstTime / (double) endTime) * 100;
     }
 
@@ -294,13 +294,13 @@ public class RoundRobin {
                     readyQueue.add(p);
                 }
             }
-        }       
+        }
     }
 
     public static void output() {
         processes.sort(Comparator.comparing(Process::getId));
+        System.out.println("\n- - - - - - - - - - - - - - - - - - I N P U T  T A B L E - - - - - - - - - - - - - - - - - -\n");
 
-        System.out.println("\nInput:");
         System.out.print("------------------------------------------");
 
         System.out.println("\nProcess \tArrival Time\tBurst Time");
@@ -311,16 +311,18 @@ public class RoundRobin {
 
         System.out.print("\n------------------------------------------\n");
 
-        System.out.println("\nGantt Chart:");
-        System.out.println(" " + topLine.toString());
-        System.out.println(processIdGanttChart.toString());
-        System.out.println(" " + bottomLine.toString());
-        System.out.println(timeGanttChart.toString());
+        System.out.println("\n- - - - - - - - - - - - - - - - - G A N T T  C H A R T - - - - - - - - - - - - - - - - - - -\n");
 
-        System.out.println("\nOutput:");
-        System.out.print("--------------------------------------------------------------------------------------------");
-        
-        System.out.println("\nProcess \tArrival Time\tBurst Time\tCompletion Time\tTurnaround Time\tWaiting Time");
+        System.out.println(" " + topLine.toString());
+        System.out.println(processId.toString());
+        System.out.println(" " + bottomLine.toString());
+        System.out.println(time.toString());
+
+        System.out.println("\n- - - - - - - - - - - - - - - - - O U T P U T  T A B L E - - - - - - - - - - - - - - - - - -\n");
+
+        System.out.println("--------------------------------------------------------------------------------------------");
+
+        System.out.println("Process \tArrival Time\tBurst Time\tCompletion Time\tTurnaround Time\tWaiting Time");
         for (Process p : processes) {
             System.out.println(p.getId() + "\t\t" + p.getArrivalTime() + "\t\t" + p.getBurstTime() + "\t\t"
                     + p.getCompletionTime() + "\t\t" + p.getTurnaroundTime() + "\t\t" + p.getWaitingTime());
@@ -328,21 +330,28 @@ public class RoundRobin {
 
         System.out.println("--------------------------------------------------------------------------------------------");
 
-        System.out.println("\nTotal Turnaround Time: " + (int) totalTurnaroundTime);
-
-        System.out.println("\nTotal Waiting Time: " + (int) totalWaitingTime);
-
-        System.out.println("\nNumber of Processes: " + n);
+        System.out.println("\n- - - - - - - - - - - - - - - - - - - O U T P U T - - - - - - - - - - - - - - - - - - - - -");
 
         DecimalFormat df = new DecimalFormat("#.##");
-        System.out.println("\nAverage Turnaround Time: " + (int) totalTurnaroundTime + " / " + n + " = " + df.format(avgTurnaroundTime));
-        System.out.println("\nAverage Waiting Time: " + (int) totalWaitingTime + " / " + n + " = " + df.format(avgWaitingTime));
+        System.out.println("\nFormula: TTAT / N = AVGTAT");
+        System.out.println("\n\tTotal Turnaround Time |TTAT|: " + (int) totalTurnaroundTime);
+        System.out.println("\n\tNumber of Processes |N|: " + n);
+        System.out.println("\nAverage Turnaround Time |AVGTAT|: " + df.format(avgTurnaroundTime) + " ms");
 
-        System.out.println("\n\nTotal Burst Time: " + (int) totalBurstTime);
+        System.out.println("\nFormula: TWT / N = AVGWT");        
+        System.out.println("\n\tTotal Waiting Time |TWT|: " + (int) totalWaitingTime);
+        System.out.println("\n\tNumber of Processes |N|: " + n);
+        System.out.println("\nAverage Waiting Time |AVGWT|: " + df.format(avgWaitingTime) + " ms");
 
-        System.out.println("\nLast Completion Time: " + endTime);
+        System.out.println("\n--------------------------------------------------------------------------------------------");
 
-        System.out.println("\nCPU Utilization: (" + (int) totalBurstTime + " / " + endTime + ") * 100 = " + df.format(cpuUtilization) + "%");
+        
+        System.out.println("\nFormula: TBT / LCT * 100 = CPU UTIL");
+        System.out.println("\n\tTotal Burst Time |TBT|: " + (int) totalBurstTime);
+        System.out.println("\n\tLast Completion Time |LCT|: " + endTime);
+        System.out.println("\nCPU Utilization |CPU UTIL|: " + df.format(cpuUtilization) + "%");
+
+        System.out.println("\n--------------------------------------------------------------------------------------------");
     }
 
     public static void main(String[] args) {
@@ -354,7 +363,7 @@ public class RoundRobin {
 
             output();
 
-            System.out.print("\nTry Again? [1] Yes [0] No: ");
+            System.out.print("\nTry Again? |1| Yes |0| No: ");
             choice = sc.nextInt();
         }
 
