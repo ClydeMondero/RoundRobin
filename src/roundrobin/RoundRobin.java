@@ -102,7 +102,7 @@ public class RoundRobin {
 
         System.out.println("----------------------------Round Robin CPU Scheduling Algorithm----------------------------");
 
-        System.out.println("\n- - - - - - - - - - - - - - - - - - - - - I N P U T - - - - - - - - - - - - - - - - - - - - ");
+        System.out.println("\n- - - - - - - - - - - - - - - - - - - I N P U T - - - - - - - - - - - - - - - - - - - - - -");
 
         System.out.print("\nNumber of Processes: ");
         n = sc.nextInt();
@@ -177,7 +177,7 @@ public class RoundRobin {
             topLine.append("---------");
 
             processId.append(" |   ").append("--").append("   ");
-            time.append("     ").append(currentTime).append("    ");
+            time.append(" ").append(currentTime).append("        ");
 
             bottomLine.append("---------");
 
@@ -230,16 +230,16 @@ public class RoundRobin {
 
                 processId.append("|   ").append("P").append(currentProcess.getId()).append("   ");
                 if (completedProcess != n) {
-                    time.append("    ").append(startTime);
+                    time.append(startTime);
                 } else {
                     processId.append("|");
-                    time.append("    ").append(startTime).append("       ").append(endTime);
+                    time.append(startTime).append("       ").append(endTime);
                 }
 
                 if (startTime >= 10) {
-                    time.append("   ");
+                    time.append("       ");
                 } else {
-                    time.append("    ");
+                    time.append("        ");
                 }
 
                 bottomLine.append("---------");
@@ -247,12 +247,12 @@ public class RoundRobin {
                 topLine.append("---------");
 
                 processId.append("|   ").append("--").append("   ");
-                time.append("    ").append(currentTime);
+                time.append(currentTime);
 
                 if (currentTime >= 10) {
-                    time.append("  ");
+                    time.append("      ");
                 } else {
-                    time.append("    ");
+                    time.append("        ");
                 }
 
                 bottomLine.append("---------");
@@ -333,23 +333,17 @@ public class RoundRobin {
         System.out.println("\n- - - - - - - - - - - - - - - - - - - O U T P U T - - - - - - - - - - - - - - - - - - - - -");
 
         DecimalFormat df = new DecimalFormat("#.##");
-        System.out.println("\nFormula: TTAT / N = AVGTAT");
-        System.out.println("\n\tTotal Turnaround Time |TTAT|: " + (int) totalTurnaroundTime);
-        System.out.println("\n\tNumber of Processes |N|: " + n);
-        System.out.println("\nAverage Turnaround Time |AVGTAT|: " + df.format(avgTurnaroundTime) + " ms");
+        System.out.println("\nAverage Turnaround Time: " + (int) totalTurnaroundTime + " / " + n + " = " + df.format(avgTurnaroundTime) + " ms");
+        System.out.println("\n\tTotal Turnaround Time: " + (int) totalTurnaroundTime);
+        System.out.println("\n\tNumber of Processes: " + n);        
 
-        System.out.println("\nFormula: TWT / N = AVGWT");        
-        System.out.println("\n\tTotal Waiting Time |TWT|: " + (int) totalWaitingTime);
-        System.out.println("\n\tNumber of Processes |N|: " + n);
-        System.out.println("\nAverage Waiting Time |AVGWT|: " + df.format(avgWaitingTime) + " ms");
-
-        System.out.println("\n--------------------------------------------------------------------------------------------");
-
+        System.out.println("\nAverage Waiting Time: " + (int) totalWaitingTime + " / " + n + " = " + df.format(avgWaitingTime) + " ms");       
+        System.out.println("\n\tTotal Waiting Time: " + (int) totalWaitingTime);
+        System.out.println("\n\tNumber of Processes: " + n);                
         
-        System.out.println("\nFormula: TBT / LCT * 100 = CPU UTIL");
-        System.out.println("\n\tTotal Burst Time |TBT|: " + (int) totalBurstTime);
-        System.out.println("\n\tLast Completion Time |LCT|: " + endTime);
-        System.out.println("\nCPU Utilization |CPU UTIL|: " + df.format(cpuUtilization) + "%");
+        System.out.println("\nCPU Utilization: ("  + (int) totalBurstTime + " / " + n + ") * 100 = " + df.format(cpuUtilization) + "%");
+        System.out.println("\n\tTotal Burst Time: " + (int) totalBurstTime);
+        System.out.println("\n\tLast Completion Time: " + endTime);        
 
         System.out.println("\n--------------------------------------------------------------------------------------------");
     }
