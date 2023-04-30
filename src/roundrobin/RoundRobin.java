@@ -89,7 +89,7 @@ public class RoundRobin {
 
     static ArrayList<Process> processes = new ArrayList<>();
 
-    public static void input() {
+     public static void input() {
         if (!processes.isEmpty()) {
             processes.clear();
             readyQueue.clear();
@@ -99,21 +99,21 @@ public class RoundRobin {
             time.setLength(0);
         }
 
-        System.out.println("----------------------------Round Robin CPU Scheduling Algorithm----------------------------");
+        System.out.println("\n----------------------------Round Robin CPU Scheduling Algorithm----------------------------");
 
-        System.out.println("\n- - - - - - - - - - - - - - - - - - - - I N P U T - - - - - - - - - - - - - - - - - - - - - -");
+        System.out.println("\n- - - - - - - - - - - - - - - - - - - - - I N P U T - - - - - - - - - - - - - - - - - - - - -");
 
         System.out.print("\nNumber of Processes: ");
         n = sc.nextInt();
 
         while (n <= 0 || n < 3 || n > 6) {
-            System.out.println("\nInvalid Number of Processes!");
+            System.out.println("\n\t\t\t\tInvalid Number of Processes!");
             if (n <= 0) {
-                System.out.println("\nNumber of Processes cannot be less than or equal to 0!");
+                System.out.println("\n\t\t  Number of Processes cannot be less than or equal to 0!");
             } else if (n < 3) {
-                System.out.println("\nMinimun Number of Processes is 3!");
+                System.out.println("\n\t\t\t      Minimun Number of Processes is 3!");
             } else if (n > 6) {
-                System.out.println("\nMaximum Number of Processes is 6!");
+                System.out.println("\n\t\t\t      Maximum Number of Processes is 6!");
             }
             System.out.print("\nNumber of Processes: ");
             n = sc.nextInt();
@@ -132,8 +132,8 @@ public class RoundRobin {
         timeQuantum = sc.nextInt();
 
         while (timeQuantum <= 0) {
-            System.out.println("\nInvalid Time Quantum!");
-            System.out.println("\nTime Quantum cannot be less than or equal 0!");
+            System.out.println("\n\t\t\t\t    Invalid Time Quantum!");
+            System.out.println("\n\t\t\t  Time Quantum cannot be less than or equal 0!");
             System.out.print("\nTime Quantum: ");
             timeQuantum = sc.nextInt();
         }
@@ -298,6 +298,7 @@ public class RoundRobin {
 
     public static void output() {
         processes.sort(Comparator.comparing(Process::getId));
+        
         System.out.println("\n- - - - - - - - - - - - - - - - - - I N P U T  T A B L E - - - - - - - - - - - - - - - - - -\n");
 
         System.out.print("\t\t\t  ------------------------------------------");
@@ -310,14 +311,15 @@ public class RoundRobin {
 
         System.out.print("\n\t\t\t  ------------------------------------------\n");
 
-        System.out.println("\n- - - - - - - - - - - - - - - - - - G A N T T  C H A R T - - - - - - - - - - - - - - - - - - -\n");
+        
+        System.out.println("\n- - - - - - - - - - - - - - - - - - G A N T T  C H A R T - - - - - - - - - - - - - - - - - -\n");
 
         System.out.println(" " + topLine.toString());
         System.out.println(processId.toString());
         System.out.println(" " + bottomLine.toString());
         System.out.println(time.toString());
 
-        System.out.println("\n- - - - - - - - - - - - - - - - - - O U T P U T  T A B L E - - - - - - - - - - - - - - - - - -\n");
+        System.out.println("\n- - - - - - - - - - - - - - - - - - O U T P U T  T A B L E - - - - - - - - - - - - - - - - -\n");
 
         System.out.println("--------------------------------------------------------------------------------------------");
 
@@ -329,7 +331,7 @@ public class RoundRobin {
 
         System.out.println("--------------------------------------------------------------------------------------------");
 
-        System.out.println("\n- - - - - - - - - - - - - - - - - - - - O U T P U T - - - - - - - - - - - - - - - - - - - - -");
+        System.out.println("\n- - - - - - - - - - - - - - - - - - - - - O U T P U T - - - - - - - - - - - - - - - - - - - -");
 
         DecimalFormat df = new DecimalFormat("#.##");
         System.out.println("\nAverage Turnaround Time: " + (int) totalTurnaroundTime + " / " + n + " = " + df.format(avgTurnaroundTime) + " ms");
