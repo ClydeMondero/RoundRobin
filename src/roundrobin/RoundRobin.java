@@ -3,7 +3,8 @@ package roundrobin;
 import java.text.DecimalFormat;
 import java.util.*;
 
-class Process {
+public class RoundRobin {
+    private static class Process {
 
     private int id, arrivalTime, burstTime, remainingTime, completionTime, turnaroundTime, waitingTime;
     boolean inQueue, isComplete;
@@ -82,8 +83,6 @@ class Process {
 
 }
 
-public class RoundRobin {
-
     static int n, timeQuantum, arrivalTime, burstTime;
 
     static Scanner sc = new Scanner(System.in);
@@ -102,7 +101,7 @@ public class RoundRobin {
 
         System.out.println("----------------------------Round Robin CPU Scheduling Algorithm----------------------------");
 
-        System.out.println("\n- - - - - - - - - - - - - - - - - - - I N P U T - - - - - - - - - - - - - - - - - - - - - -");
+        System.out.println("\n- - - - - - - - - - - - - - - - - - - - I N P U T - - - - - - - - - - - - - - - - - - - - - -");
 
         System.out.print("\nNumber of Processes: ");
         n = sc.nextInt();
@@ -301,24 +300,24 @@ public class RoundRobin {
         processes.sort(Comparator.comparing(Process::getId));
         System.out.println("\n- - - - - - - - - - - - - - - - - - I N P U T  T A B L E - - - - - - - - - - - - - - - - - -\n");
 
-        System.out.print("------------------------------------------");
+        System.out.print("\t\t\t  ------------------------------------------");
 
-        System.out.println("\nProcess \tArrival Time\tBurst Time");
+        System.out.println("\n\t\t\t  Process \tArrival Time\tBurst Time");
         for (Process p : processes) {
-            System.out.println(p.getId() + "\t\t" + p.getArrivalTime() + "\t\t" + p.getBurstTime());
+            System.out.println("\t\t\t  " + p.getId() + "\t\t" + p.getArrivalTime() + "\t\t" + p.getBurstTime());
         }
-        System.out.print("Time Quantum: " + timeQuantum);
+        System.out.print("\t\t\t  Time Quantum: " + timeQuantum);
 
-        System.out.print("\n------------------------------------------\n");
+        System.out.print("\n\t\t\t  ------------------------------------------\n");
 
-        System.out.println("\n- - - - - - - - - - - - - - - - - G A N T T  C H A R T - - - - - - - - - - - - - - - - - - -\n");
+        System.out.println("\n- - - - - - - - - - - - - - - - - - G A N T T  C H A R T - - - - - - - - - - - - - - - - - - -\n");
 
         System.out.println(" " + topLine.toString());
         System.out.println(processId.toString());
         System.out.println(" " + bottomLine.toString());
         System.out.println(time.toString());
 
-        System.out.println("\n- - - - - - - - - - - - - - - - - O U T P U T  T A B L E - - - - - - - - - - - - - - - - - -\n");
+        System.out.println("\n- - - - - - - - - - - - - - - - - - O U T P U T  T A B L E - - - - - - - - - - - - - - - - - -\n");
 
         System.out.println("--------------------------------------------------------------------------------------------");
 
@@ -330,7 +329,7 @@ public class RoundRobin {
 
         System.out.println("--------------------------------------------------------------------------------------------");
 
-        System.out.println("\n- - - - - - - - - - - - - - - - - - - O U T P U T - - - - - - - - - - - - - - - - - - - - -");
+        System.out.println("\n- - - - - - - - - - - - - - - - - - - - O U T P U T - - - - - - - - - - - - - - - - - - - - -");
 
         DecimalFormat df = new DecimalFormat("#.##");
         System.out.println("\nAverage Turnaround Time: " + (int) totalTurnaroundTime + " / " + n + " = " + df.format(avgTurnaroundTime) + " ms");
@@ -341,7 +340,7 @@ public class RoundRobin {
         System.out.println("\n\tTotal Waiting Time: " + (int) totalWaitingTime);
         System.out.println("\n\tNumber of Processes: " + n);                
         
-        System.out.println("\nCPU Utilization: ("  + (int) totalBurstTime + " / " + n + ") * 100 = " + df.format(cpuUtilization) + "%");
+        System.out.println("\nCPU Utilization: ("  + (int) totalBurstTime + " / " + endTime + ") * 100 = " + df.format(cpuUtilization) + "%");
         System.out.println("\n\tTotal Burst Time: " + (int) totalBurstTime);
         System.out.println("\n\tLast Completion Time: " + endTime);        
 
